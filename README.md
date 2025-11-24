@@ -33,19 +33,4 @@ It helps restaurant managers and staff streamline inventory, scheduling, and com
 - **bcrypt** — Password hashing
 - **dotenv** — Environment variable management
 
----
-
-## 📂 Project Structure
-backend/ 
-├── src/ 
-│ ├── config/ # Database connection 
-│ ├── controllers/ # Business logic 
-│ ├── models/ # Mongoose schemas 
-│ ├── routes/ # API endpoints 
-│ ├── middleware/ # Auth middleware 
-│ ├── utils/ # Helpers 
-├── server.js # Entry point 
-├── .env # Environment variables 
-├── .gitignore # Ignored files 
-└── package.json
 
