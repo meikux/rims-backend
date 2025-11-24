@@ -1,11 +1,14 @@
-const express = require('express')
-const app = express()
-const port = 3000
+// server.js
+const express = require('express');
+const dotenv = require('dotenv');
+const connectDB = require('./src/config/db');
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+dotenv.config(); // Load .env
+connectDB();     // Connect to MongoDB
 
-app.listen(port, () => {
-  console.log(`Testing nodemon app listening on port ${port}`)
-})
+const app = express();
+app.use(express.json());
+
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
