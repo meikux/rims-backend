@@ -1,4 +1,4 @@
-const Log = require('../models/Log');
+const Log = require('../models/Logs');
 
 module.exports = async (req, res, next) => {
   if (req.user) {
