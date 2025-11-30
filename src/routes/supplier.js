@@ -1,10 +1,19 @@
-const express = require('express');
-const Supplier = require('../models/Supplier');
-const auth = require('../middleware/auth');
+const express = require("express");
 const router = express.Router();
+const Supplier = require("../models/Supplier");
 
-// Add supplier (manager only)
-router.post('/', auth('manager'), async (req, res) => {
+// GET all suppliers
+router.get("/", async (req, res) => {
+  try {
+    const suppliers = await Supplier.find();
+    res.json(suppliers);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch suppliers" });
+  }
+});
+
+// POST new supplier
+router.post("/", async (req, res) => {
   try {
     const supplier = new Supplier(req.body);
     await supplier.save();
@@ -14,24 +23,29 @@ router.post('/', auth('manager'), async (req, res) => {
   }
 });
 
-// Get all suppliers
-router.get('/', auth(), async (req, res) => {
+// PUT update supplier
+router.put("/:id", async (req, res) => {
   try {
-    const suppliers = await Supplier.find();
-    res.json(suppliers);
+    const supplier = await Supplier.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!supplier) return res.status(404).json({ error: "Supplier not found" });
+    res.json(supplier);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ error: err.message });
   }
 });
 
-// Place order (manager only, mock)
-router.post('/:id/order', auth('manager'), async (req, res) => {
+// DELETE supplier
+router.delete("/:id", async (req, res) => {
   try {
-    const supplier = await Supplier.findById(req.params.id);
-    if (!supplier) return res.status(404).json({ error: 'Supplier not found' });
-    res.json({ message: `Order placed with ${supplier.name}` });
+    const supplier = await Supplier.findByIdAndDelete(req.params.id);
+    if (!supplier) return res.status(404).json({ error: "Supplier not found" });
+    res.json({ message: "Supplier deleted" });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Failed to delete supplier" });
   }
 });
 
